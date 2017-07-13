@@ -37,6 +37,7 @@ namespace EpieHorarios
             {
                 horas.Add(Horario.HoraIntToStr(i));
             }
+            horas.Add(Horario.HoraIntToStr(740));
             CursoList.ItemsSource = DBServices.ObtenerCursos();
             DiaList.ItemsSource = DBServices.ObtenerDias();
             HInicioList.ItemsSource = horas;

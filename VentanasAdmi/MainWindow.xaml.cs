@@ -28,8 +28,11 @@ namespace EpieHorarios
         private ZKFPEngX sensor = SensorInstance.Instance;
         List<Profesor> profesores;
         int fpcHandle;
-        string[] profes = new string[200];
-        DispatcherTimer timer = new DispatcherTimer();
+        Dia hoy;
+        Profesor[] profes = new Profesor[200];
+        DispatcherTimer reloj = new DispatcherTimer();
+        DispatcherTimer limpiar = new DispatcherTimer();
+        TimeSpan tlimpiar;
 
         public MainWindow()
         {
@@ -42,14 +45,29 @@ namespace EpieHorarios
             DBInstance.OpenDBConnection();
             Identificacion_Activada();
 
-            timer.Tick += new EventHandler(Timer_Tick);
-            timer.Interval = new TimeSpan(0, 0, 1);
-            timer.Start();
+            reloj.Tick += new EventHandler(Timer_Tick);
+            reloj.Interval = new TimeSpan(0, 0, 1);
+            reloj.Start();
+
+            limpiar.Tick += Limpiar_Tick;
+            limpiar.Interval = new TimeSpan(0, 0, 1);            
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             Time.Text = DateTime.Now.ToString("HH:mm:ss");
+        }
+        private void Limpiar_Tick(object sender, EventArgs e)
+        {
+            if (tlimpiar == TimeSpan.Zero)
+            {
+                Nombre.Text = "";
+                Asistencia.Text = "";
+                Curso.Text = "";
+                Finger.Source = null;
+                limpiar.Stop();
+            }
+            tlimpiar = tlimpiar.Add(TimeSpan.FromSeconds(-1));
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -90,20 +108,33 @@ namespace EpieHorarios
 
             if (id != -1)
             {
-                Nombre.Text = profes[id];
-                Asistencia.Text = "Asistencia marcada a las " + DateTime.Now.ToString("HH:mm:ss");
+                Profesor profe = profes[id];
+                Nombre.Text = profe.nombre + " " + profe.apellido;
+                int horaActual = DateTime.Now.Hour * 60 + DateTime.Now.Minute;
+                Horario hora = DBServices.ObtenerHorarioActualDeProfesor(profe, hoy, horaActual);
+                if (hora != null)
+                {
+                    Asistencia.Text = "Asistencia marcada a las " + DateTime.Now.ToString("HH:mm");
+                    Curso.Text = "Curso: " + hora.curso.nombre;
+                }
+                else
+                    Asistencia.Text = "No tiene clases ahora";
             }
             else
             {
-                Trace.WriteLine("Huella no coincide con ningun profesor");
+                Nombre.Text = "Profesor no registrado";
             }
+
+            limpiar.Stop();
+            tlimpiar = TimeSpan.FromSeconds(5);
+            limpiar.Start();
         }
 
         private void Button_Admin(object sender, RoutedEventArgs e)
         {
             ControlAdmin ca = new ControlAdmin();
             ca.ShowDialog();
-            bool res = ca.Estado;            
+            bool res = ca.Estado;
 
             if (res)
             {
@@ -112,10 +143,6 @@ namespace EpieHorarios
                 admin.Closed += Admin_Closed;
                 this.Hide();
                 Identificacion_Desactivada();
-            }
-            else
-            {
-                MessageBox.Show("Contraseña incorrecta");
             }
         }
         
@@ -135,11 +162,13 @@ namespace EpieHorarios
                 sensor.OnCapture += Fp_OnCapture;
                 sensor.OnImageReceived += Fp_OnImageReceived;
 
+                hoy = Dia.ObtenerDia();
+
                 profesores = DBServices.ObtenerProfesores();
 
                 foreach (var profe in profesores)
                 {
-                    profes[profe.id] = profe.nombre + " "  + profe.apellido;
+                    profes[profe.id] = profe;
                     string huella = profe.huella;
                     string huella10 = profe.huella10;
 
@@ -147,7 +176,7 @@ namespace EpieHorarios
                         Trace.WriteLine("Huella ingresada " + profe.nombre);
                     else
                         Trace.WriteLine("Huella no ingresada");
-                }
+                }               
             }
             else
             {

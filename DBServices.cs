@@ -96,7 +96,7 @@ namespace EpieHorarios
         {
             SqlConnection con = DBInstance.Instance;
             SqlCommand com = new SqlCommand("uspObtenerDia", con);
-            Dia dia = null;
+            Dia dia = new Dia();
             com.CommandType = System.Data.CommandType.StoredProcedure;
             com.Parameters.Add(new SqlParameter("@id", id));
             com.ExecuteNonQuery();
@@ -106,7 +106,9 @@ namespace EpieHorarios
                 while (reader.Read())
                 {
                     Trace.WriteLine(String.Format("{0}", reader[0]));
-                    dia = new Dia(id, (string)reader[0]);
+                    dia.id = id;
+                    dia.nombre = (string)reader[0];
+                    
                 }
             }
             return dia;
@@ -188,7 +190,7 @@ namespace EpieHorarios
         {
             SqlConnection con = DBInstance.Instance;
             SqlCommand com = new SqlCommand("uspObtenerCurso", con);
-            Curso curso = null;
+            Curso curso = new Curso();
             com.CommandType = System.Data.CommandType.StoredProcedure;
             com.Parameters.Add(new SqlParameter("@id", id));
             com.ExecuteNonQuery();
@@ -198,7 +200,8 @@ namespace EpieHorarios
                 while (reader.Read())
                 {
                     Trace.WriteLine(String.Format("{0}", reader[0]));
-                    curso = new Curso(id, (string)reader[0]);                    
+                    curso.id = id;
+                    curso.nombre = (string)reader[0];
                 }
             }
             return curso;
@@ -221,6 +224,30 @@ namespace EpieHorarios
                 }
             }
             return list;
+        }
+
+        public static Horario ObtenerHorarioActualDeProfesor(Profesor profe, Dia dia, int hora)
+        {
+            SqlConnection con = DBInstance.Instance;
+            List<Horario> list = new List<Horario>();
+            SqlCommand com = new SqlCommand("uspObtenerHorarioActualProfesor", con);
+            com.CommandType = System.Data.CommandType.StoredProcedure;
+            com.Parameters.Add(new SqlParameter("@profeid", profe.id));
+            com.Parameters.Add(new SqlParameter("@diaid", dia.id));
+            com.Parameters.Add(new SqlParameter("@hora", hora));            
+            com.ExecuteNonQuery();
+
+            using (SqlDataReader reader = com.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Trace.WriteLine(String.Format("{0} \t | {1} \t | {2} \t | {3} \t | {4} \t | {5}", reader[0], reader[1], reader[2], reader[3], reader[4], reader[5]));
+                    Curso curso = new Curso((int)reader[1], (string)reader[2]);
+                    Horario horario = new Horario((int)reader[0], profe, curso, dia, (int)reader[4], (int)reader[5]);
+                    list.Add(horario);
+                }
+            }            
+            return list.FirstOrDefault();
         }
 
         public static List<Horario> ObtenerHorariosDeProfesor(Profesor profesor)
@@ -246,12 +273,12 @@ namespace EpieHorarios
             return list;
         }
 
-        public static void ObtenerAsistenciasDeProfesor(int profeid)
+        public static void ObtenerAsistenciasDeProfesor(Profesor profe)
         {
             SqlConnection con = DBInstance.Instance;
             SqlCommand com = new SqlCommand("uspObtenerAsistenciasProfesor", con);
             com.CommandType = System.Data.CommandType.StoredProcedure;
-            com.Parameters.Add(new SqlParameter("@profeid", profeid));
+            com.Parameters.Add(new SqlParameter("@profeid", profe.id));
             com.ExecuteNonQuery();
 
             using (SqlDataReader reader = com.ExecuteReader())

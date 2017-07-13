@@ -12,7 +12,8 @@
         <Button Content="Conguración" HorizontalAlignment="Left" Margin="75,32,0,0" VerticalAlignment="Top" Width="95" Click="Button_Admin"/>
         <TextBlock x:Name="Time" HorizontalAlignment="Left" Margin="231,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="60" Width="250" TextAlignment="Center"/>
         <TextBlock x:Name="Nombre" HorizontalAlignment="Left" Margin="231,143,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Width="250" TextAlignment="Center"/>
-        <TextBlock x:Name="Asistencia" HorizontalAlignment="Left" Margin="231,196,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Width="250" TextAlignment="Center"/>
+        <TextBlock x:Name="Asistencia" HorizontalAlignment="Left" Margin="231,188,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Width="250" TextAlignment="Center"/>
+        <TextBlock x:Name="Curso" HorizontalAlignment="Left" Margin="231,237,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Width="250" TextAlignment="Center"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="180" Margin="54,81,0,0" VerticalAlignment="Top" Width="140">
             <Image x:Name="Finger" HorizontalAlignment="Left" Height="180" Margin="-1" VerticalAlignment="Top" Width="140"/>
         </Border>

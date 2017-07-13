@@ -47,6 +47,7 @@ namespace EpieHorarios
             else
             {
                 if (Contra.Password == PASS) Estado = true;
+                else MessageBox.Show("Contraseña incorrecta");
                 this.Close();
             }
         }

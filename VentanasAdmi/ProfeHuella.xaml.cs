@@ -34,7 +34,9 @@ namespace EpieHorarios
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
-        {                        
+        {
+            SensorInstance.OpenSensorConnection();
+
             sensor.OnImageReceived += Fp_OnImageReceived;
             sensor.OnEnroll += Fp_OnEnroll;
             sensor.OnFeatureInfo += Sensor_OnFeatureInfo;            
@@ -42,28 +44,19 @@ namespace EpieHorarios
             sensor.CancelEnroll();
             sensor.EnrollCount = 3;
             sensor.BeginEnroll();
-        }        
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            sensor.OnImageReceived -= Fp_OnImageReceived;
+            sensor.OnEnroll -= Fp_OnEnroll;
+            sensor.OnFeatureInfo -= Sensor_OnFeatureInfo;
+
+            SensorInstance.CloseSensorConnection();
+        }
 
         private void Fp_OnImageReceived(ref bool AImageValid)
         {
-            /*
-            //Verificar estado de guardado
-            switch (sensor.EnrollIndex)
-            {
-                case 2:
-                    Estado.Content = "Ingrese huella 1 vez mas";
-                    break;
-                case 3:
-                    Estado.Content = "Ingrese huella 2 veces mas";
-                    break;
-                case 4:
-                    Estado.Content = "Ingrese huella 3 veces mas";
-                    break;
-                default:
-                    break;
-            }
-            */
-            
             //Muestre imagen en ventana
             object imgdata = new object();
             if (sensor.GetFingerImage(ref imgdata))
@@ -80,7 +73,7 @@ namespace EpieHorarios
 
                 Huella.Source = bm;
             }
-        }        
+        }
         
         private void Fp_OnEnroll(bool ActionResult, object ATemplate)
         {
@@ -116,27 +109,18 @@ namespace EpieHorarios
 
         private void Sensor_OnFeatureInfo(int AQuality)
         {
-            string str = "";
+            string str = "", cali = "";
 
             if (sensor.IsRegister)
-            {
-                str += "Ingresa huella " + sensor.EnrollIndex + " veces mas";
-            }
-            str += " Fingerprint quality";
+                str = "Ingresa huella " + (sensor.EnrollIndex - 1) + " veces mas";
+            
             if (AQuality != 0)
-                str = str + " baja calidad =" + sensor.LastQuality;
+                cali = "Baja calidad de imagen =" + sensor.LastQuality;
             else
-                str = str + " calidad =" + sensor.LastQuality;
+                cali = "Calidad de imagen =" + sensor.LastQuality;
 
-            Trace.WriteLine(str);
+            Trace.WriteLine(cali);
             Estado.Content = str;
-        }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            sensor.OnImageReceived -= Fp_OnImageReceived;
-            sensor.OnEnroll -= Fp_OnEnroll;
-            sensor.OnFeatureInfo -= Sensor_OnFeatureInfo;            
         }
     }
 }
