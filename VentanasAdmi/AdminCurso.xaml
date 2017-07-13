@@ -1,0 +1,21 @@
+﻿<Window x:Class="EpieHorarios.AdminCurso"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EpieHorarios"
+        mc:Ignorable="d"
+        Title="AdminCurso" Height="300" Width="362.03"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed">
+    <Grid>
+        <DataGrid x:Name="CursoGrid"  HorizontalAlignment="Left" Height="193" Margin="26,23,0,0" VerticalAlignment="Top" Width="300" IsReadOnly="True" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding id}" Header="ID" Width="30"/>
+                <DataGridTextColumn Binding="{Binding nombre}" Header="Nombre" Width="260"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="Agregar" Content="Agregar" HorizontalAlignment="Left" Margin="77,229,0,0" VerticalAlignment="Top" Width="75" Click="Agregar_Click"/>
+        <Button x:Name="Eliminar" Content="Eliminar" HorizontalAlignment="Left" Margin="194,229,0,0" VerticalAlignment="Top" Width="75" Click="Eliminar_Click"/>
+    </Grid>
+</Window>
