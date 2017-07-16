@@ -28,6 +28,11 @@ namespace EpieHorarios
             InitializeComponent();
         }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            parent.Show();
+        }
+
         private void AdminProfe_Click(object sender, RoutedEventArgs e)
         {
             AdminProfe adminprofe = new AdminProfe();
@@ -38,11 +43,18 @@ namespace EpieHorarios
         {
             AdminCurso admincurso = new AdminCurso();
             admincurso.ShowDialog();
+        }        
+
+        private void AdminAsis_Click(object sender, RoutedEventArgs e)
+        {
+            DetalleAsis asis = new DetalleAsis();
+            asis.ShowDialog();
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private void CambiarContra_Click(object sender, RoutedEventArgs e)
         {
-            parent.Show();
-        }
+            CambiarContra cc = new CambiarContra();
+            cc.ShowDialog();
+        }        
     }
 }

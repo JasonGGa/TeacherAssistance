@@ -19,7 +19,7 @@ namespace EpieHorarios
     /// </summary>
     public partial class ControlAdmin : Window
     {
-        string PASS = "admin";
+        string PASS = DBServices.ObtenerContraAdmin("admin");
         public bool Estado { get; set; }
 
         public ControlAdmin()
@@ -31,6 +31,7 @@ namespace EpieHorarios
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Estado = false;
+            Contra.Focus();
         }
 
         private void Window_Closed(object sender, EventArgs e)

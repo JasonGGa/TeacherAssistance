@@ -102,7 +102,6 @@ namespace EpieHorarios
             {
                 DBServices.ActualizarProfesor(profe);
                 MessageBox.Show("Datos de profesor actualizados exitosamente");
-                this.Close();
             }
         }
 

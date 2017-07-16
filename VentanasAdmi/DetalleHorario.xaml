@@ -15,9 +15,9 @@
         <ComboBox x:Name="DiaList" HorizontalAlignment="Left" Margin="15,93,0,0" VerticalAlignment="Top" Width="180" SelectedValuePath="id" DisplayMemberPath="nombre"/>
         <Label Content="Hora Inicio" HorizontalAlignment="Left" Margin="223,9,0,0" VerticalAlignment="Top" Height="26"/>
         <Label Content="Hora Fin" HorizontalAlignment="Left" Margin="223,67,0,0" VerticalAlignment="Top" Height="26"/>
-        <ComboBox x:Name="HInicioList" HorizontalAlignment="Left" Margin="223,35,0,0" VerticalAlignment="Top" Width="80"/>
-        <ComboBox x:Name="HFinList" HorizontalAlignment="Left" Margin="223,93,0,0" VerticalAlignment="Top" Width="80"/>
         <Button x:Name="Guardar" Content="Guardar" HorizontalAlignment="Left" Margin="63,135,0,0" VerticalAlignment="Top" Width="75" Click="Guardar_Click"/>
         <Button x:Name="Cancelar" Content="Cancelar" HorizontalAlignment="Left" Margin="185,135,0,0" VerticalAlignment="Top" Width="75" Click="Cancelar_Click"/>
+        <TextBox x:Name="HInicio" HorizontalAlignment="Left" Height="23" Margin="223,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80"/>
+        <TextBox x:Name="HFin" HorizontalAlignment="Left" Height="23" Margin="223,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80"/>
     </Grid>
 </Window>

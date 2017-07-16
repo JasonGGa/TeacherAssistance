@@ -58,7 +58,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="VentanasAdmi\CambiarContra.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="VentanasAdmi\ControlAdmin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VentanasAdmi\DetalleAsis.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -90,8 +98,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Asistencia.cs" />
+    <Compile Include="VentanasAdmi\CambiarContra.xaml.cs">
+      <DependentUpon>CambiarContra.xaml</DependentUpon>
+    </Compile>
     <Compile Include="VentanasAdmi\ControlAdmin.xaml.cs">
       <DependentUpon>ControlAdmin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VentanasAdmi\DetalleAsis.xaml.cs">
+      <DependentUpon>DetalleAsis.xaml</DependentUpon>
     </Compile>
     <Compile Include="VentanasAdmi\DetalleCurso.xaml.cs">
       <DependentUpon>DetalleCurso.xaml</DependentUpon>

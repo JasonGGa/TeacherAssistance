@@ -17,8 +17,8 @@
             </DataGrid.ItemContainerStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding id}" Header="ID" Width="30"/>
-                <DataGridTextColumn Binding="{Binding nombre}" Header="Nombres" Width="180"/>
-                <DataGridTextColumn Binding="{Binding apellido}" Header="Apellidos" Width="182"/>
+                <DataGridTextColumn Binding="{Binding apellido}" Header="Apellidos" Width="200"/>
+                <DataGridTextColumn Binding="{Binding nombre}" Header="Nombres" Width="162"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Agregar" HorizontalAlignment="Left" Margin="70,229,0,0" VerticalAlignment="Top" Width="75" Click="Boton_Agregar"/>

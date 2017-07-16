@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,16 +33,8 @@ namespace EpieHorarios
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            List<string> horas = new List<string>();
-            for (int i = 420; i <= 1260; i+=30)
-            {
-                horas.Add(Horario.HoraIntToStr(i));
-            }
-            horas.Add(Horario.HoraIntToStr(740));
             CursoList.ItemsSource = DBServices.ObtenerCursos();
             DiaList.ItemsSource = DBServices.ObtenerDias();
-            HInicioList.ItemsSource = horas;
-            HFinList.ItemsSource = horas;
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -52,6 +45,9 @@ namespace EpieHorarios
         {    
             try
             {
+                string horaInicio = HInicio.Text.Trim();
+                string horaFin = HFin.Text.Trim();
+
                 if (CursoList.SelectedItem == null)
                 {
                     MessageBox.Show("Selecciona un curso");
@@ -62,14 +58,27 @@ namespace EpieHorarios
                     MessageBox.Show("Selecciona un dia");
                     return;
                 }
-                if (HInicioList.SelectedItem == null)
+                if (horaInicio == null)
                 {
-                    MessageBox.Show("Selecciona una hora de inicio de clase");
+                    MessageBox.Show("Ingresa una hora de inicio de clase");
                     return;
                 }
-                if (HFinList.SelectedItem == null)
+                if (horaFin == null)
                 {
-                    MessageBox.Show("Selecciona una hora de fin de clase");
+                    MessageBox.Show("Ingresa una hora de fin de clase");
+                    return;
+                }
+                string patron = @"^(?:0[7-9]|1[0-9]|2[0-1]):[0-5][0-9]$";
+                Match matchini = Regex.Match(horaInicio, patron);
+                if (!matchini.Success)
+                {
+                    MessageBox.Show("Ingresa una hora de inicio válida 'HH:mm'");
+                    return;
+                }
+                Match matchfin = Regex.Match(horaFin, patron);
+                if (!matchfin.Success)
+                {
+                    MessageBox.Show("Ingresa una hora de fin válida 'HH:mm'");
                     return;
                 }
 
@@ -78,8 +87,8 @@ namespace EpieHorarios
                     profesor = profesor,
                     curso = (Curso)CursoList.SelectedItem,
                     dia = (Dia)DiaList.SelectedItem,
-                    horaini = (string)HInicioList.SelectedItem,
-                    horafin = (string)HFinList.SelectedItem
+                    horaini = horaInicio,
+                    horafin = horaFin
                 };
                 DBServices.AgregarHorario(horario);
                 MessageBox.Show("Horario agregado exitosamente");

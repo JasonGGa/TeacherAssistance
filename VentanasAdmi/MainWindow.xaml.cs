@@ -25,8 +25,7 @@ namespace EpieHorarios
 
     public partial class MainWindow : Window
     {
-        private ZKFPEngX sensor = SensorInstance.Instance;
-        List<Profesor> profesores;
+        private ZKFPEngX sensor = SensorInstance.Instance;        
         int fpcHandle;
         Dia hoy;
         Profesor[] profes = new Profesor[200];
@@ -45,12 +44,12 @@ namespace EpieHorarios
             DBInstance.OpenDBConnection();
             Identificacion_Activada();
 
-            reloj.Tick += new EventHandler(Timer_Tick);
+            reloj.Tick += Timer_Tick;
             reloj.Interval = new TimeSpan(0, 0, 1);
             reloj.Start();
 
             limpiar.Tick += Limpiar_Tick;
-            limpiar.Interval = new TimeSpan(0, 0, 1);            
+            limpiar.Interval = new TimeSpan(0, 0, 1);
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -73,7 +72,7 @@ namespace EpieHorarios
         private void Window_Closed(object sender, EventArgs e)
         {
             Identificacion_Desactivada();
-            DBInstance.CloseDBConnection();            
+            DBInstance.CloseDBConnection();     
         }
 
         private void Fp_OnImageReceived(ref bool AImageValid)
@@ -96,7 +95,6 @@ namespace EpieHorarios
                     bm.StreamSource = ms;
                     bm.EndInit();
                 }
-
                 Finger.Source = bm;
             }
         }
@@ -106,16 +104,29 @@ namespace EpieHorarios
             int id = 0, processNum = 0, score = 0;
             id = sensor.IdentificationInFPCacheDB(fpcHandle, ATemplate, ref score, ref processNum);
 
+            Nombre.Text = "";
+            Asistencia.Text = "";
+            Curso.Text = "";
+
             if (id != -1)
             {
                 Profesor profe = profes[id];
                 Nombre.Text = profe.nombre + " " + profe.apellido;
                 int horaActual = DateTime.Now.Hour * 60 + DateTime.Now.Minute;
-                Horario hora = DBServices.ObtenerHorarioActualDeProfesor(profe, hoy, horaActual);
+                int tolerancia = 5;
+                Horario hora = DBServices.ObtenerHorarioActualDeProfesor(profe, hoy, horaActual, tolerancia);
                 if (hora != null)
                 {
-                    Asistencia.Text = "Asistencia marcada a las " + DateTime.Now.ToString("HH:mm");
-                    Curso.Text = "Curso: " + hora.curso.nombre;
+                    if (hora.estado)
+                        Asistencia.Text = "Ya marcó su asistencia";
+                    else if (horaActual > Horario.HoraStrToInt(hora.horaini) + tolerancia)
+                        Asistencia.Text = "Asistencia no marcada, llegó tarde";
+                    else
+                    {
+                        Asistencia.Text = "Asistencia marcada a las " + DateTime.Now.ToString("HH:mm");
+                        Curso.Text = "Curso: " + hora.curso.nombre;
+                        DBServices.AgregarAsistencia(hora);
+                    }
                 }
                 else
                     Asistencia.Text = "No tiene clases ahora";
@@ -164,9 +175,10 @@ namespace EpieHorarios
 
                 hoy = Dia.ObtenerDia();
 
-                profesores = DBServices.ObtenerProfesores();
+                List<Profesor> profeshoy = DBServices.ObtenerProfesoresPorDia(hoy);
+                List<Profesor> profestodos = DBServices.ObtenerProfesores();
 
-                foreach (var profe in profesores)
+                foreach (var profe in profeshoy)
                 {
                     profes[profe.id] = profe;
                     string huella = profe.huella;
@@ -176,7 +188,19 @@ namespace EpieHorarios
                         Trace.WriteLine("Huella ingresada " + profe.nombre);
                     else
                         Trace.WriteLine("Huella no ingresada");
-                }               
+                }
+
+                foreach (var profe in profestodos)
+                {
+                    profes[profe.id] = profe;
+                    string huella = profe.huella;
+                    string huella10 = profe.huella10;
+
+                    if (sensor.AddRegTemplateStrToFPCacheDBEx(fpcHandle, profe.id, huella, huella10) == 1)
+                        Trace.WriteLine("Huella ingresada " + profe.nombre);
+                    else
+                        Trace.WriteLine("Huella no ingresada");
+                }
             }
             else
             {
@@ -203,7 +227,7 @@ namespace EpieHorarios
                 }
 
                 SensorInstance.CloseSensorConnection();
-            }            
+            }
         }
     }
 }

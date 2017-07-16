@@ -10,7 +10,7 @@ namespace EpieHorarios
     {
         public Horario() { }
 
-        public Horario(Profesor profesor, Curso curso, Dia dia, string horaini, string horafin, int estado)
+        public Horario(Profesor profesor, Curso curso, Dia dia, string horaini, string horafin, bool estado)
         {
             this.profesor = profesor;
             this.curso = curso;
@@ -30,13 +30,24 @@ namespace EpieHorarios
             this.horafin = HoraIntToStr(horafin);
         }
 
+        public Horario(int id, Profesor profesor, Curso curso, Dia dia, int horaini, int horafin, bool estado)
+        {
+            this.id = id;
+            this.profesor = profesor;
+            this.curso = curso;
+            this.dia = dia;
+            this.horaini = HoraIntToStr(horaini);
+            this.horafin = HoraIntToStr(horafin);
+            this.estado = estado;
+        }
+
         public int id { get; set; }
         public Profesor profesor { get; set; }
         public Curso curso { get; set; }
         public Dia dia { get; set; }
         public string horaini { get; set; }
         public string horafin { get; set; }
-        public int estado { get; set; }
+        public bool estado { get; set; }
 
         public static int HoraStrToInt (string hora)
         {
