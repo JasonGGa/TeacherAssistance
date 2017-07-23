@@ -76,9 +76,19 @@ namespace EpieHorarios
                 return;
             }
             if (Contra.Password.Trim() == "")
-            {
+            {                
                 MessageBox.Show("Ingresa contraseña");
                 return;
+            }
+            else
+            {
+                List<string> contras = DBServices.ObtenerContraProfesores();
+                foreach (var con in contras)
+                    if (con == Contra.Password.Trim())
+                    {
+                        MessageBox.Show("Contraseña existente, ingresa otra");
+                        return;
+                    }
             }
             if (profe.huella == null)
             {

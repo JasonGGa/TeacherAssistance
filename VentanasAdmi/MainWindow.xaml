@@ -5,17 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EpieHorarios"
         mc:Ignorable="d"
-        Title="Reconocimiento de Huella Digital" Height="350" Width="525"
+        Title="Asistencia de Profesores EPIE" Height="389" Width="525"
         Loaded="Window_Loaded"
         Closed="Window_Closed">
     <Grid>
-        <Button Content="Conguración" HorizontalAlignment="Left" Margin="75,32,0,0" VerticalAlignment="Top" Width="95" Click="Button_Admin"/>
-        <TextBlock x:Name="Time" HorizontalAlignment="Left" Margin="231,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="60" Width="250" TextAlignment="Center"/>
-        <TextBlock x:Name="Nombre" HorizontalAlignment="Left" Margin="231,143,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Width="250" TextAlignment="Center"/>
-        <TextBlock x:Name="Asistencia" HorizontalAlignment="Left" Margin="231,188,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Width="250" TextAlignment="Center"/>
-        <TextBlock x:Name="Curso" HorizontalAlignment="Left" Margin="231,237,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Width="250" TextAlignment="Center"/>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="180" Margin="54,81,0,0" VerticalAlignment="Top" Width="140">
-            <Image x:Name="Finger" HorizontalAlignment="Left" Height="180" Margin="-1" VerticalAlignment="Top" Width="140"/>
-        </Border>
+        <GroupBox Header="Marcar con huella" HorizontalAlignment="Left" Height="190" Margin="43,23,0,0" VerticalAlignment="Top" Width="150">
+            <Image x:Name="Finger" Margin="10,10,10,10"/>
+        </GroupBox>
+        <GroupBox Header="Marcar con contraseña" HorizontalAlignment="Left" Height="90" Margin="43,230,0,0" VerticalAlignment="Top" Width="150">
+            <Grid>
+                <PasswordBox x:Name="Contra" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top" Width="118"/>
+                <Button x:Name="BotonContra" Content="Marcar" HorizontalAlignment="Left" Margin="32,42,0,0" VerticalAlignment="Top" Width="75" Click="BotonContra_Click"/>
+            </Grid>
+        </GroupBox>
+        <TextBlock x:Name="Time" HorizontalAlignment="Left" Margin="225,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="60" Width="250" TextAlignment="Center"/>
+        <TextBlock x:Name="Nombre" HorizontalAlignment="Left" Margin="225,143,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Width="250" TextAlignment="Center"/>
+        <TextBlock x:Name="Asistencia" HorizontalAlignment="Left" Margin="225,188,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Width="250" TextAlignment="Center"/>
+        <TextBlock x:Name="Curso" HorizontalAlignment="Left" Margin="225,237,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="18" Width="250" TextAlignment="Center"/>
+        <Button Content="Conguración" HorizontalAlignment="Left" Margin="380,300,0,0" VerticalAlignment="Top" Width="95" Click="Button_Admin"/>
     </Grid>
 </Window>

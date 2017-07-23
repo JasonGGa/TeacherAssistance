@@ -93,6 +93,14 @@ namespace EpieHorarios
             com.ExecuteNonQuery();
         }
 
+        public static void ActualizarEstadoHorarios()
+        {
+            SqlConnection con = DBInstance.Instance;
+            SqlCommand com = new SqlCommand("uspActualizarEstadoHorarios", con);
+            com.CommandType = System.Data.CommandType.StoredProcedure;
+            com.ExecuteNonQuery();
+        }
+
         public static string ObtenerContraAdmin(string usuario)
         {
             SqlConnection con = DBInstance.Instance;
@@ -351,6 +359,24 @@ namespace EpieHorarios
                     Trace.WriteLine(String.Format("{0} \t | {1}", reader[0], reader[1]));
                 }
             }
+        }
+
+        public static List<string> ObtenerContraProfesores()
+        {
+            SqlConnection con = DBInstance.Instance;
+            List<string> list = new List<string>();
+            SqlCommand com = new SqlCommand("select Contraseña from Profesor", con);
+            com.ExecuteNonQuery();
+
+            using (SqlDataReader reader = com.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Trace.WriteLine(String.Format("{0}", reader[0]));                    
+                    list.Add((string)reader[0]);
+                }
+            }
+            return list;
         }
 
         public static void BorrarProfesor(Profesor profesor)
